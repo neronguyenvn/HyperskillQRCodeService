@@ -1,0 +1,45 @@
+<div class="step-text">
+<h5 id="description">Description</h5><p>QR codes are square-shaped patterns comprised of black squares on a white background. Your web service will generate QR codes and send them to clients as images.</p><p>In this stage, you must create a 250x250 pixel image filled with white color. You can accomplish this using the <code class="language-kotlin">java.awt.image.BufferedImage</code> class, which allows for image data manipulation. Here's an example:</p><pre><code class="language-kotlin">import java.awt.Color
+import java.awt.Graphics2D
+import java.awt.image.BufferedImage
+
+
+class SomeClass {
+    fun someFun() {
+        val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+        val g: Graphics2D = image.createGraphics()
+
+        g.setColor(Color.WHITE)
+        g.fillRect(0, 0, width, height)
+    }
+}</code></pre><p>In this example, first, create a <code class="language-kotlin">BufferedImage</code> object with the specified width and height and an 8-bit RGB color space. Then, generate a <code class="language-kotlin">Graphics2D</code> object to draw into the image. Set the color to white and draw a rectangle to fill the image with white color.</p><p>Next, serialize the <code class="language-kotlin">BufferedImage</code> and include it in the response body. There are several ways to do this, but we recommend the following two methods:</p><ul><li><p>Return the <code class="language-kotlin">BufferedImage</code> from your request handler method and let Spring Boot serialize it for you. You'll need to create a <code class="language-kotlin">HttpMessageConverter&lt;BufferedImage&gt;</code> bean to facilitate the serialization:</p><pre><code class="language-kotlin">// in the REST controller class
+
+@GetMapping(path = ["/api/qrcode"])
+fun getImage(): ResponseEntity&lt;BufferedImage&gt; {
+    val bufferedImage: BufferedImage = ... // your BufferedImage source
+    return ResponseEntity
+            .ok()
+            .contentType(MediaType.IMAGE_PNG)
+            .body(bufferedImage)
+}
+
+
+// in a configuration class
+
+@Bean
+fun bufferedImageHttpMessageConverter(): HttpMessageConverter&lt;BufferedImage&gt; {
+    return BufferedImageHttpMessageConverter();
+}</code></pre></li><li><p>Serialize the <code class="language-kotlin">BufferedImage</code> into a byte array and return that array from your request handler method. For serialization, you can use the following method: </p><pre><code class="language-kotlin">@GetMapping(path = ["/api/qrcode"])
+fun getImage(): ResponseEntity&lt;ByteArray&gt; {
+    val bufferedImage: BufferedImage = ... // your BufferedImage source
+
+    ByteArrayOutputStream().use { baos -&gt;
+        ImageIO.write(bufferedImage, "png", baos)
+        val bytes: ByteArray = baos.toByteArray()
+        return ResponseEntity
+            .ok()
+            .contentType(MediaType.IMAGE_PNG)
+            .body(bytes)
+    }
+}</code></pre></li></ul><p></p><div class="alert alert-warning"><p>It's important to programmatically create the image, as image editors can embed metadata in the image file, which could cause tests to fail.</p></div><p></p><h5 id="objectives">Objectives</h5><p>In this stage, you should:</p><ul><li><p>Modify the <code class="language-kotlin">GET /api/qrcode</code> to return the status code <code class="language-kotlin">200 OK</code> and an image as the response body. The image must be a white square, 250x250 pixels, in PNG format.</p></li><li><p>Set the correct <code class="language-kotlin">Content-Type</code> header of the response to indicate that the content type is <code class="language-kotlin">image/png</code>.</p></li></ul><h5 id="examples">Examples</h5><p><strong>Example 1</strong>. <em>a GET request to /api/health</em>:</p><p><em>Response</em>: <code class="language-kotlin">200 OK</code></p><p><strong>Example 2</strong>. <em>a GET request to /api/qrcode</em>:</p><p><em>Response code</em>: <code class="language-kotlin">200 OK</code></p><p><em>Response header</em>: <code class="language-kotlin">Content-Type: image/png</code></p><p><em>Response body</em>: byte array</p>
+</div>

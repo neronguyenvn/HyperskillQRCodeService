@@ -1,0 +1,13 @@
+type: hyperskill
+title: QRCode Service (Kotlin)
+language: English
+summary: "<p>This project utilizes QR codes — 2D barcodes that can store large amounts\
+  \ of data and are easily read by smartphones. Through this Spring Boot project,\
+  \ users can learn about the technology behind QR codes, generate them programmatically,\
+  \ and integrate them into a web service.</p><br/><br/>Learn more at <a href=\"https://hyperskill.org/projects/414?utm_source=ide&utm_medium=ide&utm_campaign=ide&utm_content=project-card\"\
+  >https://hyperskill.org/projects/414</a>"
+programming_language: Kotlin
+content:
+  - QRCode Service (Kotlin)
+mode: Study
+yaml_version: 2

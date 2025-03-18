@@ -1,0 +1,29 @@
+type: edu
+files:
+  - name: src/qrcodeapi/controller/QRCodeRestController.kt
+    visible: true
+    learner_created: false
+  - name: src/qrcodeapi/Application.kt
+    visible: true
+    learner_created: false
+  - name: src/resources/application.properties
+    visible: true
+    learner_created: false
+  - name: test/QRCodeApiTest.java
+    visible: false
+    learner_created: false
+  - name: build.gradle
+    visible: true
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/39853#comment
+status: Failed
+feedback:
+  message: |-
+    Wrong answer in test #1
+
+    Request: GET /api/health
+
+    Response has incorrect status code:
+    Expected 200, but responded with 404
+  time: "Tue, 18 Mar 2025 15:44:14 UTC"
+record: -1
