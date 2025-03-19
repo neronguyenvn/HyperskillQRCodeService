@@ -16,8 +16,14 @@ files:
     visible: true
     learner_created: false
 feedback_link: https://hyperskill.org/learn/step/39853#comment
-status: Solved
+status: Failed
 feedback:
-  message: Congratulations!
-  time: "Wed, 19 Mar 2025 15:34:37 UTC"
+  message: |-
+    Wrong answer in test #2
+
+    Request: GET /api/qrcode
+
+    Response has incorrect status code:
+    Expected 501, but responded with 406
+  time: "Wed, 19 Mar 2025 15:37:28 UTC"
 record: -1

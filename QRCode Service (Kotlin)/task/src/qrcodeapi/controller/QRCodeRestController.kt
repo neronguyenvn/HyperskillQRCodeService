@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RestController
 class QRCodeRestController {
 
     @GetMapping("/api/health")
-    fun ping(): Unit = Unit
+    fun ping() = Unit
 
     @GetMapping("/api/qrcode")
-    fun getQrCode() = ResponseEntity(Unit, HttpStatus.NOT_IMPLEMENTED)
+    fun getQrCode() = ResponseEntity
+        .status(HttpStatus.NOT_IMPLEMENTED)
+        .build<HttpStatus>()
 }
