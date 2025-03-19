@@ -16,14 +16,8 @@ files:
     visible: true
     learner_created: false
 feedback_link: https://hyperskill.org/learn/step/39853#comment
-status: Failed
+status: Solved
 feedback:
-  message: |-
-    Wrong answer in test #1
-
-    Request: GET /api/health
-
-    Response has incorrect status code:
-    Expected 200, but responded with 404
-  time: "Tue, 18 Mar 2025 15:44:14 UTC"
+  message: Congratulations!
+  time: "Wed, 19 Mar 2025 15:34:37 UTC"
 record: -1
