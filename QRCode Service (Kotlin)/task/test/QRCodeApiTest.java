@@ -11,12 +11,6 @@ import java.util.Objects;
 
 public class QRCodeApiTest extends SpringTest {
 
-    @DynamicTest
-    DynamicTesting[] tests = {
-            this::testGetHealth,
-            this::testGetQrCode
-    };
-
     CheckResult testGetHealth() {
         var url = "/api/health";
         HttpResponse response = get(url).send();
@@ -49,6 +43,12 @@ public class QRCodeApiTest extends SpringTest {
 
         return CheckResult.correct();
     }
+
+    @DynamicTest
+    DynamicTesting[] tests = {
+            this::testGetHealth,
+            this::testGetQrCode
+    };
 
     private void checkStatusCode(HttpResponse response, int expected) {
         var endpoint = response.getRequest().getEndpoint();
