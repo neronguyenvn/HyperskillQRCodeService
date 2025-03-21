@@ -15,6 +15,9 @@ files:
   - name: test/QRCodeApiTest.java
     visible: false
     learner_created: false
+  - name: src/qrcodeapi/repository/QrCodeRepository.kt
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/39855#comment
 status: Unchecked
 record: -1
