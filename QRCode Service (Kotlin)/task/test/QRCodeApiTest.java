@@ -25,19 +25,6 @@ public class QRCodeApiTest extends SpringTest {
 
         return CheckResult.correct();
     }
-    @DynamicTest
-    DynamicTesting[] tests = {
-            this::testGetHealth,
-
-            () -> testGetQrCode(150, "png", "b67a6f17fe353b997585e65e2903ab7b"),
-            () -> testGetQrCode(350, "jpeg", "f614890233a60b13e8e40c7ff554a92c"),
-            () -> testGetQrCode(250, "gif", "cc9d9b226e2fab856cb5d008c94c5475"),
-
-            () -> testGetQrCodeInvalidParams(99, "gif", BAD_SIZE_MSG),
-            () -> testGetQrCodeInvalidParams(351, "png", BAD_SIZE_MSG),
-            () -> testGetQrCodeInvalidParams(451, "webp", BAD_SIZE_MSG),
-            () -> testGetQrCodeInvalidParams(200, "tiff", BAD_TYPE_MSG)
-    };
 
     CheckResult testGetQrCode(int size, String imgType, String expectedHash) {
         var url = "/api/qrcode?size=%d&type=%s".formatted(size, imgType);
@@ -71,6 +58,20 @@ public class QRCodeApiTest extends SpringTest {
 
         return CheckResult.correct();
     }
+
+    @DynamicTest
+    DynamicTesting[] tests = {
+            this::testGetHealth,
+
+            () -> testGetQrCode(150, "png", "b67a6f17fe353b997585e65e2903ab7b"),
+            () -> testGetQrCode(350, "jpeg", "f614890233a60b13e8e40c7ff554a92c"),
+            () -> testGetQrCode(250, "gif", "cc9d9b226e2fab856cb5d008c94c5475"),
+
+            () -> testGetQrCodeInvalidParams(99, "gif", BAD_SIZE_MSG),
+            () -> testGetQrCodeInvalidParams(351, "png", BAD_SIZE_MSG),
+            () -> testGetQrCodeInvalidParams(451, "webp", BAD_SIZE_MSG),
+            () -> testGetQrCodeInvalidParams(200, "tiff", BAD_TYPE_MSG)
+    };
 
     private void checkStatusCode(HttpResponse response, int expected) {
         var endpoint = response.getRequest().getEndpoint();
