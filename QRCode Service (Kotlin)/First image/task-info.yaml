@@ -15,6 +15,12 @@ files:
   - name: test/QRCodeApiTest.java
     visible: false
     learner_created: false
+  - name: src/qrcodeapi/repository/QrCodeRepository.kt
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/39854#comment
-status: Unchecked
-record: -1
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Thu, 20 Mar 2025 16:03:36 UTC"
+record: 2
