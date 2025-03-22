@@ -15,6 +15,18 @@ files:
   - name: test/QRCodeApiTest.java
     visible: false
     learner_created: false
+  - name: src/qrcodeapi/usecase/ValidateImageTypeUseCase.kt
+    visible: true
+    learner_created: true
+  - name: src/qrcodeapi/model/ErrorResponse.kt
+    visible: true
+    learner_created: true
+  - name: src/qrcodeapi/repository/QrCodeRepository.kt
+    visible: true
+    learner_created: true
+  - name: src/qrcodeapi/usecase/ValidateQrSizeUseCase.kt
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/39856#comment
 status: Unchecked
 record: -1

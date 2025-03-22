@@ -22,8 +22,8 @@ class QRCodeRestController(
 
     @GetMapping("/api/qrcode")
     fun getQrCode(
-        @RequestParam size: Int = 150,
-        @RequestParam type: String = "png"
+        @RequestParam size: Int,
+        @RequestParam type: String
     ): ResponseEntity<Any> {
 
         validateQrSizeUseCase(size).onFailure {
