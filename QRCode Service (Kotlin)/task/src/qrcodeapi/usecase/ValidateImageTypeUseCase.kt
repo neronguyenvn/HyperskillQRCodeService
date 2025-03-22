@@ -14,6 +14,8 @@ class ValidateImageTypeUseCase {
     }
 
     companion object {
+        const val DEFAULT_TYPE = "png"
+
         private val ALLOWED_TYPES = setOf("png", "jpeg", "gif")
         private const val ERROR_MESSAGE = "Only png, jpeg and gif image types are supported"
     }

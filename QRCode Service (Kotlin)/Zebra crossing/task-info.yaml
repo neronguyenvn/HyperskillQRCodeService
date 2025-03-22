@@ -30,9 +30,18 @@ files:
   - name: src/qrcodeapi/usecase/ValidateQrContentsUseCase.kt
     visible: true
     learner_created: true
+  - name: src/qrcodeapi/model/QrCorrectionLevel.kt
+    visible: true
+    learner_created: true
+  - name: src/qrcodeapi/usecase/GetQrCorrectionLevelUseCase.kt
+    visible: true
+    learner_created: true
+  - name: src/qrcodeapi/util/EnumExts.kt
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/learn/step/39856#comment
 status: Solved
 feedback:
   message: Congratulations!
-  time: "Sat, 22 Mar 2025 07:05:51 UTC"
-record: -1
+  time: "Sat, 22 Mar 2025 07:57:34 UTC"
+record: 4

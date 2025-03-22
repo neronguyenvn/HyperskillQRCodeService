@@ -14,6 +14,8 @@ class ValidateQrSizeUseCase {
     }
 
     companion object {
+        const val DEFAULT_SIZE = 250
+
         private const val MIN_SIZE = 150
         private const val MAX_SIZE = 350
         private const val ERROR_MESSAGE = "Image size must be between $MIN_SIZE and $MAX_SIZE pixels"

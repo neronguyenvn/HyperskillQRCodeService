@@ -18,6 +18,7 @@ import static org.hyperskill.hstest.testing.expect.json.JsonChecker.isString;
 public class QRCodeApiTest extends SpringTest {
     private static final String BAD_SIZE_MSG = "Image size must be between 150 and 350 pixels";
     private static final String BAD_TYPE_MSG = "Only png, jpeg and gif image types are supported";
+    private static final String BAD_CORRECTION_MSG = "Permitted error correction levels are L, M, Q, H";
     private static final String BAD_CONTENTS_MSG = "Contents cannot be null or blank";
 
     CheckResult testGetHealth() {
@@ -28,10 +29,45 @@ public class QRCodeApiTest extends SpringTest {
 
         return CheckResult.correct();
     }
+    @DynamicTest
+    DynamicTesting[] tests = {
+            this::testGetHealth,
 
-    CheckResult testGetQrCode(String contents, int size, String imgType, String expectedHash) {
-        var url = "/api/qrcode?contents=%s&size=%d&type=%s"
-                .formatted(encodeUrl(contents), size, imgType);
+            () -> testGetQrCode(contents[1], null, null, null, "f4d19902b0ae101de9b03b8aea5556dc"),
+            () -> testGetQrCode(contents[1], 200, null, null, "357759acd42e878ce86bf7f00071df7d"),
+            () -> testGetQrCode(contents[1], null, "H", null, "21d1f792360f6946a7583d79e8ae18ef"),
+            () -> testGetQrCode(contents[2], null, null, "gif", "af3f3319944ad1271a3d2e3e5de12a30"),
+            () -> testGetQrCode(contents[3], 200, "Q", null, "a524b79ddeff57aa74357f9b608b6dff"),
+            () -> testGetQrCode(contents[4], 200, null, "jpeg", "2a700a58e2b593a998e428fae8f9f4e7"),
+            () -> testGetQrCode(contents[5], null, "Q", "gif", "5208d69a5c3541c16e61fb846cd82f37"),
+            () -> testGetQrCode(contents[6], 200, "H", "jpeg", "69879de9db73966792bacbbe69f06146"),
+
+            () -> testGetQrCodeInvalidParams(contents[0], 99, "L", "gif", BAD_SIZE_MSG),
+            () -> testGetQrCodeInvalidParams(contents[0], 351, "L", "png", BAD_SIZE_MSG),
+            () -> testGetQrCodeInvalidParams(contents[0], 451, "L", "webp", BAD_SIZE_MSG),
+            () -> testGetQrCodeInvalidParams(contents[0], 200, "L", "webp", BAD_TYPE_MSG),
+            () -> testGetQrCodeInvalidParams("", 200, "L", "webp", BAD_CONTENTS_MSG),
+            () -> testGetQrCodeInvalidParams("   ", 500, "S", "webp", BAD_CONTENTS_MSG),
+            () -> testGetQrCodeInvalidParams(contents[0], 500, "S", "webp", BAD_SIZE_MSG),
+            () -> testGetQrCodeInvalidParams(contents[0], 200, "S", "webp", BAD_CORRECTION_MSG)
+    };
+
+    CheckResult testGetQrCode(String contents,
+                              Integer size,
+                              String correction,
+                              String imgType,
+                              String expectedHash) {
+
+        var url = "/api/qrcode?contents=%s".formatted(encodeUrl(contents));
+        if (size != null) {
+            url += "&size=%d".formatted(size);
+        }
+        if (correction != null) {
+            url += "&correction=%s".formatted(correction);
+        }
+        if (imgType != null) {
+            url += "&type=%s".formatted(imgType);
+        }
         HttpResponse response = get(url).send();
 
         checkStatusCode(response, 200);
@@ -49,18 +85,6 @@ public class QRCodeApiTest extends SpringTest {
                     """.formatted(url, expectedHash, contentHash)
             );
         }
-
-        return CheckResult.correct();
-    }
-
-    CheckResult testGetQrCodeInvalidParams(String contents, int size, String imgType, String message) {
-        var url = "/api/qrcode?contents=%s&size=%d&type=%s"
-                .formatted(encodeUrl(contents), size, imgType);
-
-        HttpResponse response = get(url).send();
-
-        checkStatusCode(response, 400);
-        checkErrorMessage(response, message);
 
         return CheckResult.correct();
     }
@@ -84,25 +108,21 @@ public class QRCodeApiTest extends SpringTest {
             END:VCARD"""
     };
 
-    @DynamicTest
-    DynamicTesting[] tests = {
-            this::testGetHealth,
+    CheckResult testGetQrCodeInvalidParams(String contents,
+                                           int size,
+                                           String correction,
+                                           String imgType,
+                                           String message) {
+        var url = "/api/qrcode?contents=%s&size=%d&correction=%s&type=%s"
+                .formatted(encodeUrl(contents), size, correction, imgType);
 
-            () -> testGetQrCode(contents[1], 200, "jpeg", "a9e1e394f5766304127ba88bd9f0bd5a"),
-            () -> testGetQrCode(contents[2], 200, "gif", "3d6cc8d84284c0d10af3370c1fa883a8"),
-            () -> testGetQrCode(contents[3], 300, "png", "e2e18076d34f09a01eb283c7b140b268"),
-            () -> testGetQrCode(contents[4], 300, "jpeg", "3f00dbd2593bdf4b229d6addf09464a4"),
-            () -> testGetQrCode(contents[5], 200, "gif", "db6ef9d4a2d81285c9f5ed85f870d092"),
-            () -> testGetQrCode(contents[6], 200, "jpeg", "401a4a780f22cd752b8162512d1eb3f8"),
-            () -> testGetQrCode(contents[7], 300, "gif", "d167d42b222297df6c754aea3273681f"),
+        HttpResponse response = get(url).send();
 
-            () -> testGetQrCodeInvalidParams(contents[0], 99, "gif", BAD_SIZE_MSG),
-            () -> testGetQrCodeInvalidParams(contents[0], 351, "png", BAD_SIZE_MSG),
-            () -> testGetQrCodeInvalidParams(contents[0], 451, "webp", BAD_SIZE_MSG),
-            () -> testGetQrCodeInvalidParams(contents[0], 200, "webp", BAD_TYPE_MSG),
-            () -> testGetQrCodeInvalidParams("", 200, "webp", BAD_CONTENTS_MSG),
-            () -> testGetQrCodeInvalidParams("   ", 500, "webp", BAD_CONTENTS_MSG)
-    };
+        checkStatusCode(response, 400);
+        checkErrorMessage(response, message);
+
+        return CheckResult.correct();
+    }
 
     private void checkStatusCode(HttpResponse response, int expected) {
         var endpoint = response.getRequest().getEndpoint();
@@ -121,7 +141,7 @@ public class QRCodeApiTest extends SpringTest {
 
     private void checkContentType(HttpResponse response, String imgType) {
         var endpoint = response.getRequest().getEndpoint();
-        var expected = "image/" + imgType;
+        var expected = "image/" + (imgType == null ? "png" : imgType);
         var actual = response.getHeaders().get("Content-Type");
         if (!Objects.equals(expected, actual)) {
             throw new WrongAnswer("""
